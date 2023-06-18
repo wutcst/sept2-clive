@@ -13,6 +13,13 @@ public class CommandWords
         commands.put("go", new GoCommand());
         commands.put("help", new HelpCommand(this));
         commands.put("quit", new QuitCommand());
+        commands.put("back",new BackCommand());
+        commands.put("ex_back",new Ex_backCommand());
+        commands.put("look",new LookCommand());
+        commands.put("take",new TakeCommand());
+        commands.put("drop",new DropCommand());
+        commands.put("item",new ItemCommand());
+        commands.put("cookie",new CookieCommand());
     }
 
     public Command get(String word)

@@ -12,21 +12,35 @@
  * @version 1.0
  */
 package cn.edu.whut.sept.zuul;
-
+import java.util.Random ;
 public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private Room nextRoom;
+    private Room lastRoom;
+    private Room temp;
+    private Player player = new Player();
+    Random r = new Random();
 
     public Game()
     {
         createRooms();
+        createPlayer();
         parser = new Parser();
+    }
+
+    public boolean transform(int i)
+    {
+        if(i==1)
+            return true;
+        else
+            return false;
     }
 
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
+        Room outside, theater, pub, lab, office,canteen,auditorium;
 
         // create the rooms
         outside = new Room("outside the main entrance of the university");
@@ -34,6 +48,8 @@ public class Game
         pub = new Room("in the campus pub");
         lab = new Room("in a computing lab");
         office = new Room("in the computing admin office");
+        canteen = new Room("in the campus canteen");
+        auditorium = new Room("in a auditorium");
 
         // initialise room exits
         outside.setExit("east", theater);
@@ -41,16 +57,105 @@ public class Game
         outside.setExit("west", pub);
 
         theater.setExit("west", outside);
-
         pub.setExit("east", outside);
-
         lab.setExit("north", outside);
-        lab.setExit("east", office);
 
+        lab.setExit("east", office);
         office.setExit("west", lab);
 
+        office.setExit("north",theater);
+        theater.setExit("south",office);
+
+        outside.setExit("north",canteen);
+        canteen.setExit("south",outside);
+
+        canteen.setExit("east",auditorium);
+        auditorium.setExit("west",canteen);
+
+        theater.setExit("north",auditorium);
+        auditorium.setExit("south",theater);
+
         currentRoom = outside;  // start game outside
+        lastRoom = outside;
+        setTemp(outside);
+
+        theater.setCookie(transform(r.nextInt()%2));
+        canteen.setCookie(transform(r.nextInt()%2));
+        auditorium.setCookie(transform(r.nextInt()%2));
+        pub.setCookie(transform(r.nextInt()%2));
+        lab.setCookie(transform(r.nextInt()%2));
+        office.setCookie(transform(r.nextInt()%2));
+
+        Item mask = new Item(1,"mask",0.1);
+        Item popcorn = new Item(2,"popcorn",0.5);
+        Item ticket = new Item(3,"ticket",0.1);
+        Item microphone = new Item(4,"microphone",1);
+        Item bowl = new Item(5,"bowl",0.3);
+        Item chopsticks = new Item(6,"chopsticks",0.1);
+        Item plate = new Item(7,"plate",0.3);
+        Item dustbin = new Item(8,"dustbin",0.3);
+        Item loudspeaker = new Item(9,"loudspeaker",1);
+        Item note = new Item(10,"note",0.2);
+        Item pen = new Item(11,"pen",0.2);
+        Item water = new Item(12,"water",0.5);
+        Item glass = new Item(13,"glass",0.5);
+        Item whisky = new Item(14,"whisky",1.5);
+        Item beer = new Item(15,"beer",1);
+        Item soft_drinks = new Item(16,"soft_drinks",2);
+        Item screen = new Item(17,"screen",4);
+        Item mouse = new Item(18,"mouse",0.5);
+        Item keyboard = new Item(19,"keyboard",1.5);
+        Item disk = new Item(20,"disk",0.1);
+        Item PC = new Item(21,"PC",7);
+        Item cup = new Item(22,"cup",0.3);
+        Item snack = new Item(23,"snack",0.5);
+        Item paper = new Item(24,"paper",0.1);
+
+        Item item01[] = {mask,popcorn,ticket,microphone,null};
+        Item item02[] = {bowl,chopsticks,plate,dustbin,null};
+        Item item03[] = {loudspeaker,note,pen,water,null};
+        Item item04[] = {glass,whisky,beer,soft_drinks,null};
+        Item item05[] = {screen,mouse,keyboard,disk,null};
+        Item item06[] = {PC,cup,snack,paper,null};
+
+        outside.setItem2(null);
+        theater.setItem2(item01);
+        canteen.setItem2(item02);
+        auditorium.setItem2(item03);
+        pub.setItem2(item04);
+        lab.setItem2(item05);
+        office.setItem2(item06);
+
+        theater.setItemNum2(4);
+        canteen.setItemNum2(4);
+        auditorium.setItemNum2(4);
+        pub.setItemNum2(4);
+        lab.setItemNum2(4);
+        office.setItemNum2(4);
+
+        theater.setTotalWeight2(1.7);
+        canteen.setTotalWeight2(1);
+        auditorium.setTotalWeight2(1.9);
+        pub.setTotalWeight2(5);
+        lab.setTotalWeight2(6.1);
+        office.setTotalWeight2(7.9);
+
     }
+
+    public void createPlayer()
+    {
+        player.setCurrentRoom(currentRoom);
+        player.setId(1);
+        player.setName("mushroom");
+        player.setItemNum1(2);
+        player.setWeightLimit(10);
+        player.setTotalWeight1(1.5);
+        Item glasses = new Item(25,"glasses",0.5);
+        Item cellphone= new Item(26,"cellphone",1);
+        Item item07[] = { glasses,cellphone,null,null,null };
+        player.setItem1(item07);
+    }
+
 
     public void play()
     {
@@ -88,5 +193,28 @@ public class Game
 
     public void setCurrentRoom(Room room){
         this.currentRoom = room;
+    }
+
+    public Room getNextRoom() { return  nextRoom; }
+
+    public void setNextRoom(Room room){this.nextRoom=room; }
+
+    public Room getLastRoom() { return  lastRoom; }
+
+    public void setLastRoom(Room room){this.lastRoom=room; }
+
+    public Room getTemp()
+    {
+        return temp;
+    }
+
+    public void setTemp(Room temp)
+    {
+        this.temp = temp;
+    }
+
+    public Player getPlayer()
+    {
+        return player;
     }
 }

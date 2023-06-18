@@ -7,16 +7,24 @@ public class GoCommand extends Command
         if(!hasSecondWord()) {
             System.out.println("Go where?");
         }
-
         String direction = getSecondWord();
         Room currentRoom = game.getCurrentRoom();
-
+        Room temp;
         Room nextRoom = game.getCurrentRoom().getExit(direction);
 
-        if (nextRoom == null) {
+        if (nextRoom == null)
+        {
             System.out.println("There is no door!");
         }
-        else {
+        else if(currentRoom!=game.getTemp())
+        {
+            temp=currentRoom;
+            game.setCurrentRoom(nextRoom);
+            game.setLastRoom(temp);
+            System.out.println(nextRoom.getLongDescription());
+        }
+        else
+        {
             game.setCurrentRoom(nextRoom);
             System.out.println(nextRoom.getLongDescription());
         }
