@@ -1,8 +1,8 @@
-package cn.edu.whut.sept.zuul;
+package UI;
 
 public class QuitCommand extends Command
 {
-    public boolean execute(Game game)
+    public boolean execute(GameFrame game)
     {
         if(hasSecondWord()) {
             System.out.println("Quit what?");

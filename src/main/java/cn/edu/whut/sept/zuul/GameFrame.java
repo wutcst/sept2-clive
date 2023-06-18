@@ -14,15 +14,19 @@ import java.util.Random ;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class GameFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
 	private DBService dbs;
+	private JLabel imgLabel;
 	
     private Parser parser;
     private Room currentRoom;
@@ -33,16 +37,18 @@ public class GameFrame extends JFrame {
     Random r = new Random();
     private Room[] rooms = new Room[7];
     private Item[] items = new Item[27];
+    Command command;
+	CommandWords comw = new CommandWords();
 
     private void initRooms() {
         // create the rooms
-    	rooms[0] = new Room("outside the main entrance of the university");
-    	rooms[1] = new Room("in a lecture theater");
-    	rooms[2] = new Room("in the campus pub");
-    	rooms[3] = new Room("in a computing lab");
-    	rooms[4] = new Room("in the computing admin office");
-    	rooms[5] = new Room("in the campus canteen");
-    	rooms[6] = new Room("in a auditorium");
+    	rooms[0] = new Room("<html>outside the main entrance of the university<html/>");
+    	rooms[1] = new Room("<html>in a lecture theater<html/>");
+    	rooms[2] = new Room("<html>in the campus pub<html/>");
+    	rooms[3] = new Room("<html>in a computing lab<html/>");
+    	rooms[4] = new Room("<html>in the computing admin office<html/>");
+    	rooms[5] = new Room("<html>in the campus canteen<html/>");
+    	rooms[6] = new Room("<html>in a auditorium<html/>");
     }
     
     private void initItems() {
@@ -117,61 +123,73 @@ public class GameFrame extends JFrame {
 		btnNewButton.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton.setBounds(25, 68, 120, 30);
 		panel.add(btnNewButton);
+		btnNewButton.addActionListener(new operate1());
 		
 		JButton btnNewButton_1 = new JButton("向南移动");
 		btnNewButton_1.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton_1.setBounds(25, 128, 120, 30);
 		panel.add(btnNewButton_1);
+		btnNewButton_1.addActionListener(new operate2());
 		
 		JButton btnNewButton_2 = new JButton("向东移动");
 		btnNewButton_2.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton_2.setBounds(25, 190, 120, 30);
 		panel.add(btnNewButton_2);
+		btnNewButton_2.addActionListener(new operate3());
 		
 		JButton btnNewButton_3 = new JButton("向西移动");
 		btnNewButton_3.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton_3.setBounds(25, 252, 120, 30);
 		panel.add(btnNewButton_3);
+		btnNewButton_3.addActionListener(new operate4());
 		
 		JButton btnNewButton_4 = new JButton("后退");
 		btnNewButton_4.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton_4.setBounds(25, 310, 120, 30);
 		panel.add(btnNewButton_4);
+		btnNewButton_4.addActionListener(new operate5());
 		
 		JButton btnNewButton_5 = new JButton("一键后退");
 		btnNewButton_5.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton_5.setBounds(25, 371, 120, 30);
 		panel.add(btnNewButton_5);
+		btnNewButton_5.addActionListener(new operate6());
 		
 		JButton btnNewButton_6 = new JButton("帮助");
 		btnNewButton_6.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton_6.setBounds(562, 68, 120, 30);
 		panel.add(btnNewButton_6);
+		btnNewButton_6.addActionListener(new operate7());
 		
 		JButton btnNewButton_7 = new JButton("查看");
 		btnNewButton_7.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton_7.setBounds(562, 128, 120, 30);
 		panel.add(btnNewButton_7);
+		btnNewButton_7.addActionListener(new operate8());
 		
 		JButton btnNewButton_8 = new JButton("拿起物品");
 		btnNewButton_8.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton_8.setBounds(562, 190, 120, 30);
 		panel.add(btnNewButton_8);
+		btnNewButton_8.addActionListener(new operate9());
 		
 		JButton btnNewButton_9 = new JButton("放下物品");
 		btnNewButton_9.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton_9.setBounds(562, 252, 120, 30);
 		panel.add(btnNewButton_9);
+		btnNewButton_9.addActionListener(new operate10());
 		
 		JButton btnNewButton_10 = new JButton("物品");
 		btnNewButton_10.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton_10.setBounds(562, 310, 120, 30);
 		panel.add(btnNewButton_10);
+		btnNewButton_10.addActionListener(new operate11());
 		
 		JButton btnNewButton_11 = new JButton("魔法饼干");
 		btnNewButton_11.setFont(new Font("宋体", Font.BOLD, 18));
 		btnNewButton_11.setBounds(562, 371, 120, 30);
 		panel.add(btnNewButton_11);
+		btnNewButton_11.addActionListener(new operate12());
 		
 		JButton btnNewButton_12 = new JButton("退出");
 		btnNewButton_12.setFont(new Font("宋体", Font.BOLD, 18));
@@ -186,8 +204,16 @@ public class GameFrame extends JFrame {
 					saveData();
 					dbs.saveToDB();
 					System.exit(0);
-				}
+				}// else 
+				 //	setLabel("<html>453456545132486513546815324615324513453<br/>4453451324513246531645132465133415<br/>321653453124</html>");
 			}
+		});
+		this.addWindowListener(new WindowAdapter() {
+		    public void windowClosing(WindowEvent e) { // 退出系统
+		        super.windowClosing(e);
+				saveData();
+				dbs.saveToDB();
+		    }
 		});
 		
 		JLabel lblNewLabel_1 = new JLabel("输入框：");
@@ -200,13 +226,129 @@ public class GameFrame extends JFrame {
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		JLabel imgLabel = new JLabel("");
+		imgLabel = new JLabel("");
+		imgLabel.setVerticalAlignment(SwingConstants.TOP);
+		imgLabel.setFont(new Font("宋体", Font.BOLD, 16));
 		imgLabel.setBounds(180, 68, 352, 333);
 		panel.add(imgLabel);
 		this.setVisible(true);
+		
+		if (dbs.getIsExist() && !newGame)
+			printWelcomeBack();
+		else
+			printWelcome();
+	}
+	
+	public class operate1 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	        setCommand("go", "north");
+	        command.execute(getFrame());
+	    }
 	}
 
-    private void setData() {
+	public class operate2 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	        setCommand("go", "south");
+	        command.execute(getFrame());
+	    }
+	}
+
+	public class operate3 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	        setCommand("go", "east");
+	        command.execute(getFrame());
+	    }
+	}
+
+	public class operate4 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	        setCommand("go", "west");
+	        command.execute(getFrame());
+	    }
+	}
+
+	public class operate5 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	        setCommand("back", null);
+	        command.execute(getFrame());
+	    }
+	}
+
+	public class operate6 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	        setCommand("ex_back", null);
+	        command.execute(getFrame());
+	    }
+	}
+
+	public class operate7 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	        setCommand("help", null);
+	        command.execute(getFrame());
+	    }
+	}
+
+	public class operate8 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	        setCommand("look", null);
+	        command.execute(getFrame());
+	    }
+	}
+
+	public class operate9 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	    	if(textField.getText().equals(""))
+	    		raiseError("请输入物品的名字！");
+	    	else{
+	    		setCommand("take", null);
+		        command.execute(getFrame());
+	    	}
+	    }
+	}
+
+	public class operate10 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	    	if(textField.getText().equals(""))
+	    		raiseError("请输入物品的名字！");
+	    	else{
+		        setCommand("drop", null);
+		        command.execute(getFrame());
+	    	}
+	    }
+	}
+
+	public class operate11 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	        setCommand("item", null);
+	        command.execute(getFrame());
+	    }
+	}
+
+	public class operate12 implements ActionListener {
+	    public void actionPerformed(ActionEvent e) {
+	        setCommand("cookie", null);
+	        command.execute(getFrame());
+	    }
+	}
+
+	private void setCommand(String word1, String word2) {
+		command = comw.get(word1);
+		command.setSecondWord(word2);
+	}
+	
+    public GameFrame getFrame() {
+		return this;
+	}
+    
+    public void raiseError(String SError) {
+    	JOptionPane.showMessageDialog(null, SError, "错误提示", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public void raiseInfor(String SInfor) {
+    	JOptionPane.showMessageDialog(null, SInfor, "提示", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+	private void setData() {
 		currentRoom = rooms[dbs.getCurrentRoom()];
 		lastRoom = rooms[dbs.getCurrentRoom()];
 		//setTemp(currentRoom);
@@ -395,21 +537,34 @@ public class GameFrame extends JFrame {
             if(command == null) {
                 System.out.println("I don't understand...");
             } else {
-                finished = command.execute(this, textField.getName());
+                finished = command.execute(this);
             }
         }
 
         System.out.println("Thank you for playing.  Good bye.");
     }
 
+    private void printWelcomeBack()
+    {
+    	String text = "<html>";
+    	text += "Welcome back to the World of Zuul!<br/>";
+    	text += "Type 'help' if you need help.<br/>";
+    	text += "<br/>";
+    	text += currentRoom.getLongDescription()+"<br/>";
+    	text += "<html/>";
+    	setLabel(text);
+    }
+
     private void printWelcome()
     {
-        System.out.println();
-        System.out.println("Welcome to the World of Zuul!");
-        System.out.println("World of Zuul is a new, incredibly boring adventure game.");
-        System.out.println("Type 'help' if you need help.");
-        System.out.println();
-        System.out.println(currentRoom.getLongDescription());
+    	String text = "<html>";
+    	text += "Welcome to the World of Zuul!<br/>";
+    	text += "World of Zuul is a new, incredibly boring adventure game.<br/>";
+    	text += "Type 'help' if you need help.<br/>";
+    	text += "<br/>";
+    	text += currentRoom.getLongDescription()+"<br/>";
+    	text += "<html/>";
+    	setLabel(text);
     }
 
     public Room getCurrentRoom() {
@@ -441,6 +596,14 @@ public class GameFrame extends JFrame {
     public Player getPlayer()
     {
         return player;
+    }
+    
+    public String getText() {
+    	return textField.getText();
+    }
+    
+    public void setLabel(String label) {
+    	imgLabel.setText(label);
     }
     
 	/**
