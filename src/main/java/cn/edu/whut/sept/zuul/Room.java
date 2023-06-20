@@ -1,4 +1,4 @@
-package cn.edu.whut.sept.zuul;
+package main.java.cn.edu.whut.sept.zuul;
 
 import java.util.Set;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ public class Room
 
     public String getLongDescription()
     {
-        return "You are " + description + ".\n" + getExitString();
+        return "<html>You are <html/>" + description + "<br/><html/>" + getExitString()+"<html/>";
     }
 
     private String getExitString()
@@ -72,27 +72,27 @@ public class Room
 
     public int getItemNum2()
     {
-        return itemNum2;
+        return this.itemNum2;
     }
 
     public double getTotalWeight2()
     {
-        return totalWeight2;
+        return this.totalWeight2;
     }
 
     public Item[] getItem2()
     {
-        return item2;
+        return this.item2;
     }
 
     public boolean isCookie()
     {
-        return cookie;
+        return this.cookie;
     }
 
     public void setItem02(int i,Item item){ this.item2[i] = item;}
 
-    public Item getItem02(int i) { return item2[i]; }
+    public Item getItem02(int i) { return this.item2[i]; }
 
 
 }
