@@ -1,4 +1,4 @@
-package UI;
+package main.java.cn.edu.whut.sept.zuul;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
