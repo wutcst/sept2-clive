@@ -1,4 +1,4 @@
-package cn.edu.whut.sept.zuul;
+package main.java.cn.edu.whut.sept.zuul;
 
 public abstract class Command
 {
@@ -24,6 +24,6 @@ public abstract class Command
         this.secondWord = secondWord;
     }
 
-    public abstract boolean execute(Game game);
+    public abstract boolean execute(GameFrame game);
 
 }
