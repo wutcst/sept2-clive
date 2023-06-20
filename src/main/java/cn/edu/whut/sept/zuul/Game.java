@@ -11,7 +11,7 @@
  * @author  Michael Kölling and David J. Barnes
  * @version 1.0
  */
-package cn.edu.whut.sept.zuul;
+package main.java.cn.edu.whut.sept.zuul;
 import java.util.Random ;
 public class Game
 {
@@ -32,10 +32,7 @@ public class Game
 
     public boolean transform(int i)
     {
-        if(i==1)
-            return true;
-        else
-            return false;
+        return i==1;
     }
 
     private void createRooms()
@@ -170,7 +167,7 @@ public class Game
             if(command == null) {
                 System.out.println("I don't understand...");
             } else {
-                finished = command.execute(this);
+                //finished = command.execute(this);
             }
         }
 
@@ -205,7 +202,7 @@ public class Game
 
     public Room getTemp()
     {
-        return temp;
+        return this.temp;
     }
 
     public void setTemp(Room temp)
